@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 务必配置正确namespace 就是所映射的实体类 -->
+<mapper namespace="com.xuanwu.xtion.dao.CustomerOrderDao">
+
+	<resultMap type="com.xuanwu.xtion.domain.CustomerOrder" id="customerOrderMap">
+		<id property="id" column="id" />
+		<result property="ecCode" column="ecCode"/>
+		<result property="orderId" column="orderId"/>
+		<result property="orderTime" column="orderTime"/>
+		<result property="proCode" column="proCode"/>
+		<result property="orderNum" column="orderNum"/>
+		<result property="feeCode" column="feeCode"/>
+		<result property="feeName" column="feeName"/>
+		<result property="unitPrice" column="unitPrice"/>
+		<result property="orderFee" column="orderFee"/>
+		<result property="feePeriod" column="feePeriod"/>
+		<result property="validity" column="validity"/>
+		<result property="orderNote" column="orderNote"/>
+		<result property="createTime" column="createTime"/>
+		<result property="updateTime" column="updateTime"/>
+		<association property="cusFeeItemsList" column="{cusOrderId=cusOrderId}" select="com.xuanwu.xtion.dao.CustomerOrderDao.findFeeListByOrderId" ></association>
+	</resultMap>
+	
+	<resultMap type="com.xuanwu.xtion.domain.CusFeeItemsList" id="cusFeeListItemsMap">
+		<id property="id" column="id"/>
+		<result property="cusOrderId" column="cusOrderId"/>
+		<result property="proCode" column="proCode"/>
+		<result property="proName" column="proName"/>
+		<result property="proUnit" column="proUnit"/>
+		<result property="proNum" column="proNum"/>
+	</resultMap>
+	
+	<insert id="addCustomerOrder" parameterType="CustomerOrder" useGeneratedKeys="true" keyProperty="id">
+		insert into com_t_customerOrder (
+		ecCode,
+		orderId,
+		orderTime,
+		proCode,
+		orderNum,
+		feeCode,
+		feeName,
+		unitPrice,
+		orderFee,
+		feePeriod,
+		validity,
+		orderNote,
+		createTime,
+		updateTime
+		)values(
+		#{ecCode},#{orderId},#{orderdTime},#{proCode},#{orderNum},
+		#{feeCode},#{feeName},#{unitPrice},#{orderFee},#{feePeriod},
+		#{validity},#{orderNote},#{createTime},#{updateTime}
+		) 
+	</insert>
+	
+	<insert id="addCusFeeItemsList" parameterType="CusFeeItemsList" useGeneratedKeys="true" keyProperty="id">
+		insert into com_t_cusFeeItemsList(
+			cusOrderId,
+			proCode,
+   			proName,
+   			proUnit,
+   			proNum 
+		)values(
+		#{cusOrderId},
+		#{proCode},
+		#{proName},
+		#{proUnit},
+		#{proNum}
+		)
+	</insert>
+	
+	<select id="findOrderInfoById" parameterType="Integer" resultType="CustomerOrder">
+   		select id, 
+   		ecCode,
+		orderId,
+		orderTime as orderdTime,
+		proCode,
+		orderNum,
+		feeCode,
+		feeName,
+		unitPrice,
+		orderFee,
+		feePeriod,
+		validity,
+		orderNote,
+		createTime,
+		updateTime from com_t_customerOrder where id=#{id}
+   </select>
+	
+   <select id="findFeeListByOrderId" resultMap="cusFeeListItemsMap">
+   	select 
+   	id,
+   	cusOrderId,
+   	proCode,
+   	proName,
+   	proUnit,
+   	proNum 
+   	from com_t_cusFeeItemsList 
+   	where cusOrderId=#{cusOrderId} 
+   </select>
+   
+   <select id="findOrderInfoByorderIdAndEcname" parameterType="QueryParameters" resultType="CustomerOrder">
+      select ecCode,
+		orderId,
+		orderTime as orderdTime,
+		proCode,
+		orderNum,
+		feeCode,
+		feeName,
+		unitPrice,
+		orderFee,
+		feePeriod,
+		validity,
+		orderNote,
+		createTime,
+		updateTime from com_t_customerOrder where orderId=#{params.orderId} and ecCode=#{params.ecCode}
+   </select>
+   
+   <update id="updateCustomerOrder" parameterType="CustomerOrder">
+   	update com_t_customerOrder set
+		proCode=#{proCode},
+		orderNum=#{orderNum},
+		feeCode=#{feeCode},
+		feeName=#{feeName},
+		unitPrice=#{unitPrice},
+		orderFee=#{orderFee},
+		feePeriod=#{feePeriod},
+		validity=#{validity},
+		orderNote=#{orderNote},
+		updateTime=#{updateTime}
+		where orderId=#{orderId} and ecCode=#{ecCode}
+   </update>
+   
+   <update id="updateCusFeeItemsList" parameterType="CusFeeItemsList">
+   update com_t_cusFeeItemsList set
+   	proCode=#{proCode},
+   	proName=#{proName},
+   	proUnit=#{proUnit},
+   	proNum=#{proNum} 
+   	where cusOrderId=#{cusOrderId} 
+   </update>
+   
+   
+  
+
+</mapper> 

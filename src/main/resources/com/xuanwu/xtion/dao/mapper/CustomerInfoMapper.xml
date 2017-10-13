@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 务必配置正确namespace 就是所映射的实体类 -->
+<mapper namespace="com.xuanwu.xtion.dao.CustomerInfoDao">
+
+	<resultMap type="com.xuanwu.xtion.domain.CustomerInfo" id="customerInfoMap">
+		<id property="id" column="id" />
+		<result property="ecName" column="ecName"/>
+		<result property="ecCode" column="ecCode"/>
+		<result property="ecLevel" column="ecLevel"/>
+		<result property="proCode" column="proCode"/>
+		<result property="ecAddress" column="ecAddress"/>
+		<result property="ecPostCode" column="ecPostCode"/>
+		<result property="ecStatus" column="ecStatus"/>
+		<result property="createTime" column="createTime"/>
+		<result property="updateTime" column="updateTime"/>
+		<association property="custList" column="{customerId=id}" select="com.xuanwu.xtion.dao.CustomerInfoDao.findAccountManagerByCustId" ></association>
+		<association property="keyList" column="{customerId=id}" select="com.xuanwu.xtion.dao.CustomerInfoDao.findKeyPerinfoByCustId" ></association>
+	</resultMap>
+	
+	<resultMap type="com.xuanwu.xtion.domain.AccountManager" id="accountManagerMap">
+		<id property="id" column="id" />
+		<result property="customerId" column="customerId"/>
+		<result property="staffName" column="staffName"/>
+		<result property="staffPhone" column="staffPhone"/>
+		<result property="staffMobile" column="staffMobile"/>
+	</resultMap>
+	
+	<resultMap type="com.xuanwu.xtion.domain.KeyPersonInfo" id="keyPersonInfoMap">
+		<id property="id" column="id" />
+		<result property="customerId" column="customerId"/>
+		<result property="keyRole" column="keyRole"/>
+		<result property="keyName" column="keyName"/>
+		<result property="keyPhone" column="keyPhone"/>
+		<result property="keyEmail" column="keyEmail"/>
+	</resultMap>
+
+	<insert id="insertCusInfo" parameterType="CustomerInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into com_t_customerInfo(ecName,ecCode,ecLevel,proCode,ecAddress,ecPostCode,ecStatus,createTime,updateTime)
+			values(#{ecName},#{ecCode},#{ecLevel},#{proCode},#{ecAddress},#{ecPostCode},#{ecStatus},#{createTime},#{updateTime})
+	</insert>
+	
+	<insert id="insertAccountManager" parameterType="AccountManager">
+		<selectKey keyProperty="id" order="AFTER" resultType="Integer" >
+			select top 1 IDENT_CURRENT('com_t_cusManagerInfo') as id
+		</selectKey>
+		insert into com_t_cusManagerInfo(customerId,staffName,staffPhone,staffMobile) 
+		values(#{customerId},#{staffName},#{staffPhone},#{staffMobile})
+	</insert>
+	
+	<insert id="insertKeyPersonInfo" parameterType="KeyPersonInfo">
+		<selectKey keyProperty="id" order="AFTER" resultType="Integer" >
+			select top 1 IDENT_CURRENT('com_t_cusKeyPersonInfo') as id
+		</selectKey>
+		insert into com_t_cusKeyPersonInfo(customerId,keyRole,keyName,keyPhone,keyEmail) 
+		values(#{customerId},#{keyRole},#{keyName},#{keyPhone},#{keyEmail})
+	</insert>
+	
+	<update id="updateCustomerInfo" parameterType="CustomerInfo">
+     update com_t_customerInfo set 
+     	ecName=#{ecName},ecCode=#{ecCode},ecLevel=#{ecLevel},proCode=#{proCode},ecAddress=#{ecAddress},ecPostCode=#{ecPostCode},
+     	ecStatus=#{ecStatus},updateTime=#{updateTime} where id=#{id}
+   </update>
+   
+   <select id="findAccountManagerByCustId" resultMap="accountManagerMap">
+   	select id,customerId,staffName,staffPhone,staffMobile from com_t_cusManagerInfo where customerId=#{customerId} 
+   </select>
+   
+   <select id="findCustInfoByNameAndCode" resultType="CustomerInfo" parameterType="QueryParameters">
+   	select id,ecName,ecCode,ecLevel,proCode,ecAddress,ecPostCode,createTime,updateTime from
+   		com_t_customerInfo where ecName=#{params.ecName} and ecCode=#{params.ecCode}
+   </select>
+   
+   <select id="findKeyPerinfoByCustId" resultMap="keyPersonInfoMap">
+   	select id,customerId,keyName,keyPhone,keyRole,keyEmail from com_t_cusKeyPersonInfo where customerId=#{customerId} 
+   </select>
+   
+   <select id="findCustomerInfoByID" parameterType="Integer" resultType="CustomerInfo">
+   	select id,ecName,ecCode,ecLevel,proCode,ecAddress,ecPostCode,ecStatus,createTime,updateTime 
+   		from com_t_customerInfo where id=#{id}
+   </select>
+   
+   <select id="findCustomerInfos"  resultMap="customerInfoMap">
+   	select id,ecName,ecCode,ecLevel,proCode,ecAddress,ecPostCode,ecStatus,createTime,updateTime 
+   		from com_t_customerInfo 
+   </select>
+   
+   <delete id="deleteCustInfoById" parameterType="Integer">
+   	delete from com_t_customerInfo where id=#{id}
+   </delete>
+
+</mapper> 

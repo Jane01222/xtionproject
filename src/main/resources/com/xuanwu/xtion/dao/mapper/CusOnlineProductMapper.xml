@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 务必配置正确namespace 就是所映射的实体类 -->
+<mapper namespace="com.xuanwu.xtion.dao.CusOnlineProductDao">
+
+	<resultMap type="com.xuanwu.xtion.domain.CusOnlineProduct" id="cusOnlineProductMap">
+		<id property="id" column="id" />
+		<result property="proCode" column="proCode"/>
+		<result property="proName" column="proName"/>
+		<result property="offerName" column="offerName"/>
+		<result property="proStatus" column="proStatus"/>
+		<result property="pubTime" column="pubTime"/>
+		<result property="createTime" column="createTime"/>
+		<result property="updateTime" column="updateTime"/>
+	</resultMap>
+	
+	<insert id="addCusOnlineProduct" parameterType="CusOnlineProduct" useGeneratedKeys="true" keyProperty="id">
+		insert into com_t_custOnLineProduct (
+		proCode,
+		proName,
+		offerName,
+		proStatus,
+		pubTime,
+		createTime,
+		updateTime
+		)values(
+		#{proCode},#{proName},#{offerName},#{proStatus},#{publishTime},
+		#{createTime},#{updateTime}
+		) 
+	</insert>
+	
+	<select id="findOnlineProducts" resultMap="cusOnlineProductMap">
+	 select id, 
+		proCode,
+		proName,
+		offerName,
+		proStatus,
+		pubTime,
+		createTime,
+		updateTime
+	from com_t_custOnLineProduct 
+	</select>
+	
+	
+	<select id="findOnlineProductById" parameterType="Integer" resultMap="cusOnlineProductMap">
+   		select id, 
+		proCode,
+		proName,
+		offerName,
+		proStatus,
+		pubTime,
+		createTime,
+		updateTime
+	from com_t_custOnLineProduct where id=#{id}
+   </select>
+   
+   <select id="selectProductByNameAndCode" resultType="Integer">
+   	SELECT COUNT(1) FROM com_t_custOnLineProduct where proCode=#{proCode} AND proName=#{proName}
+   </select>
+  
+
+</mapper> 
