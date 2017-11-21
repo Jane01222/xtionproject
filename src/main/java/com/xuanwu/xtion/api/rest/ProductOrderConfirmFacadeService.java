@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -42,6 +43,7 @@ public class ProductOrderConfirmFacadeService {
 	
 	@RequestMapping(value="api/xtion/orderConfirm/{id}",method=RequestMethod.GET)
 	public JsonResp productOrderConfirm(@PathVariable("id") Integer id){
+		logger.debug("api/xtion/orderConfirm/"+id+":"+JSONArray.toJSONString(id));
 		JsonResp jsonResp = JsonResp.failure("订单确认请求失败");
 		try {
 			String serverUri = PropertiesUtil.getPropertyValue("param.properties", "serverUri");

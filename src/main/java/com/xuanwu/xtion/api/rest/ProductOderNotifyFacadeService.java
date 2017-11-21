@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xuanwu.xtion.domain.CustomerOrder;
 import com.xuanwu.xtion.domain.JsonResp;
 import com.xuanwu.xtion.domain.QueryParameters;
@@ -43,6 +44,7 @@ public class ProductOderNotifyFacadeService {
 	 */
 	@RequestMapping(value="api/xtion/order",method = RequestMethod.POST)
 	public JsonResp orderProductNoti(HttpServletRequest request,@RequestBody CustomerOrder customerOrder){
+		logger.debug(request.getRequestURL()+":"+JSONArray.toJSONString(customerOrder));
 		JsonResp jsonResp = JsonResp.failure("产品订购信息通知失败");
 		try {
 			QueryParameters params = new QueryParameters();

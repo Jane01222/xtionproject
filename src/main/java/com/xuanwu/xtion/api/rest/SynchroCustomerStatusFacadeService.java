@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xuanwu.xtion.domain.CustomerInfo;
 import com.xuanwu.xtion.domain.JsonResp;
 import com.xuanwu.xtion.domain.QueryParameters;
@@ -33,6 +34,7 @@ public class SynchroCustomerStatusFacadeService {
 	
 	@RequestMapping(value="api/xtion/customerStatus",method=RequestMethod.POST)
 	public JsonResp updateCusStatus(HttpServletRequest request,@RequestBody CustomerInfo customerInfo){
+		logger.debug(request.getRequestURL()+":"+JSONArray.toJSONString(customerInfo));
 		JsonResp jsonResp =  JsonResp.failure("更新客户状态失败");
 		try {
 			Integer ecStatus = customerInfo.getEcStatus();

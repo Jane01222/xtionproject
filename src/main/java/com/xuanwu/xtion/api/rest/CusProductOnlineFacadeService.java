@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xuanwu.xtion.domain.CusOnlineProduct;
 import com.xuanwu.xtion.domain.JsonResp;
 import com.xuanwu.xtion.service.CusOnlineProductService;
@@ -42,6 +43,7 @@ public class CusProductOnlineFacadeService {
 	@ResponseBody
 	@RequestMapping(value="api/xtion/product",method=RequestMethod.POST)
 	public JsonResp addOnlineProductInfo(HttpServletRequest request,@RequestBody CusOnlineProduct onlineProduct){
+		logger.debug(request.getRequestURL()+":"+JSONArray.toJSONString(onlineProduct));
 		JsonResp jsonResp =  JsonResp.failure("产品上线通知失败");
 		try {
 			//首先判断客户产品信息是否存在

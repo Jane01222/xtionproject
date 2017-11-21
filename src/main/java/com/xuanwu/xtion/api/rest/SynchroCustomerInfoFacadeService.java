@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.xuanwu.xtion.domain.CustomerInfo;
 import com.xuanwu.xtion.domain.JsonResp;
 import com.xuanwu.xtion.domain.QueryParameters;
@@ -44,6 +45,7 @@ public class SynchroCustomerInfoFacadeService {
 	@ResponseBody
 	@RequestMapping(value="api/xtion/customerInfo",method=RequestMethod.POST)
 	public JsonResp addCusInfo(HttpServletRequest request,@RequestBody CustomerInfo customerInfo){
+		logger.debug(request.getRequestURL()+":"+JSONArray.toJSONString(customerInfo));
 		JsonResp jsonResp =  JsonResp.failure("同步客户信息失败");
 		try {
 			//首先判断客户信息是否存在

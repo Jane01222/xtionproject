@@ -2,6 +2,7 @@
 <configuration status="OFF" monitorInterval="200"> 
 	<properties>
 		<property name="LOG_HOME">/home/easyinfo/usr/local/beijing-platform/logs</property>
+		<!-- <property name="LOG_HOME">D:/beijing-platform/logs</property> -->
 		<property name="INFO_LOG_HOME">infolog/infolog</property>
 		<property name="DEBUG_LOG_HOME">debuglog/debuglog</property>
 		<property name="WARN_LOG_HOME">warnlog/warnlog</property>
